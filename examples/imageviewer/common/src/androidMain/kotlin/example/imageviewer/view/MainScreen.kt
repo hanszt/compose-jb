@@ -5,20 +5,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -85,7 +81,7 @@ fun TitleBar(text: String, content: ContentState) {
                     modifier = Modifier.padding(end = 20.dp).align(Alignment.CenterVertically),
                     shape = CircleShape
                 ) {
-                    Clickable(
+                    clickable(
                         onClick = {
                             if (content.isContentReady()) {
                                 content.refresh()
@@ -105,7 +101,7 @@ fun TitleBar(text: String, content: ContentState) {
 
 @Composable
 fun PreviewImage(content: ContentState) {
-    Clickable(onClick = {
+    clickable(onClick = {
         AppState.screenState(ScreenType.FullscreenImage)
     }) {
         Card(
@@ -145,7 +141,7 @@ fun Miniature(
         elevation = 2.dp
     ) {
         Row(modifier = Modifier.padding(end = 30.dp)) {
-            Clickable(
+            clickable(
                 onClick = {
                     content.fullscreen(picture)
                 }
@@ -166,7 +162,7 @@ fun Miniature(
                 style = MaterialTheme.typography.body1
             )
 
-            Clickable(
+            clickable(
                 modifier = Modifier.height(70.dp)
                     .width(30.dp),
                 onClick = {

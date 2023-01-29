@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.codeviewer.ui.editor.EditorEmptyView
 import org.jetbrains.codeviewer.ui.editor.EditorTabsView
 import org.jetbrains.codeviewer.ui.editor.EditorView
-import org.jetbrains.codeviewer.ui.filetree.FileTreeView
-import org.jetbrains.codeviewer.ui.filetree.FileTreeViewTabView
+import org.jetbrains.codeviewer.ui.filetree.fileTreeView
+import org.jetbrains.codeviewer.ui.filetree.fileTreeViewTabView
 import org.jetbrains.codeviewer.ui.statusbar.StatusBar
 import org.jetbrains.codeviewer.util.SplitterState
 import org.jetbrains.codeviewer.util.VerticalSplittable
@@ -48,8 +48,8 @@ fun CodeViewerView(model: CodeViewer) {
     ) {
         ResizablePanel(Modifier.width(animatedSize).fillMaxHeight(), panelState) {
             Column {
-                FileTreeViewTabView()
-                FileTreeView(model.fileTree)
+                fileTreeViewTabView()
+                fileTreeView(model.fileTree)
             }
         }
 

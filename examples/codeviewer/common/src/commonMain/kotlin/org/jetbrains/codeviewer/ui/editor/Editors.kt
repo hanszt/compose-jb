@@ -1,7 +1,7 @@
 package org.jetbrains.codeviewer.ui.editor
 
 import androidx.compose.runtime.mutableStateListOf
-import org.jetbrains.codeviewer.platform.File
+import org.jetbrains.codeviewer.platform.ViewerFile
 import org.jetbrains.codeviewer.util.SingleSelection
 
 class Editors {
@@ -12,7 +12,7 @@ class Editors {
 
     val active: Editor? get() = selection.selected as Editor?
 
-    fun open(file: File) {
+    fun open(file: ViewerFile) {
         val editor = Editor(file)
         editor.selection = selection
         editor.close = {

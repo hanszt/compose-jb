@@ -3,11 +3,11 @@ package org.jetbrains.codeviewer.ui.filetree
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import org.jetbrains.codeviewer.platform.File
+import org.jetbrains.codeviewer.platform.ViewerFile
 import org.jetbrains.codeviewer.ui.editor.Editors
 
 class ExpandableFile(
-    val file: File,
+    val file: ViewerFile,
     val level: Int,
 ) {
     var children: List<ExpandableFile> by mutableStateOf(emptyList())
@@ -25,7 +25,7 @@ class ExpandableFile(
     }
 }
 
-class FileTree(root: File, private val editors: Editors) {
+class FileTree(root: ViewerFile, private val editors: Editors) {
     private val expandableRoot = ExpandableFile(root, 0).apply {
         toggleExpanded()
     }

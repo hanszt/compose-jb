@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "falling_balls"
+rootProject.name = "falling-balls"

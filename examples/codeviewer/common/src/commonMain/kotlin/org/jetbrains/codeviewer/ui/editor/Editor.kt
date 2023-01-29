@@ -3,7 +3,8 @@ package org.jetbrains.codeviewer.ui.editor
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
-import org.jetbrains.codeviewer.platform.File
+import kotlinx.coroutines.Dispatchers
+import org.jetbrains.codeviewer.platform.ViewerFile
 import org.jetbrains.codeviewer.util.EmptyTextLines
 import org.jetbrains.codeviewer.util.SingleSelection
 
@@ -32,11 +33,11 @@ class Editor(
     class Content(val value: State<String>, val isCode: Boolean)
 }
 
-fun Editor(file: File) = Editor(
+fun Editor(file: ViewerFile) = Editor(
     fileName = file.name
 ) { backgroundScope ->
     val textLines = try {
-        file.readLines(backgroundScope)
+        file.readLines(backgroundScope, Dispatchers.IO)
     } catch (e: Throwable) {
         e.printStackTrace()
         EmptyTextLines

@@ -89,7 +89,7 @@ fun TitleBar(text: String, content: ContentState) {
                 shape = CircleShape
             ) {
                 Tooltip(ResString.refresh) {
-                    Clickable(
+                    clickable(
                         modifier = Modifier
                             .hoverable(interactionSource)
                             .background(color = if (refreshButtonHover) TranslucentBlack else Transparent),
@@ -113,7 +113,7 @@ fun TitleBar(text: String, content: ContentState) {
 
 @Composable
 fun PreviewImage(content: ContentState) {
-    Clickable(
+    clickable(
         modifier = Modifier.background(color = DarkGray),
         onClick = {
             AppState.screenState(ScreenType.FullscreenImage)
@@ -159,7 +159,7 @@ fun Miniature(
         shape = RectangleShape
     ) {
         Row(modifier = Modifier.padding(end = 30.dp)) {
-            Clickable(
+            clickable(
                 onClick = {
                     content.fullscreen(picture)
                 }
@@ -185,7 +185,7 @@ fun Miniature(
                 style = MaterialTheme.typography.body1
             )
 
-            Clickable(
+            clickable(
                 modifier = Modifier.height(70.dp)
                     .width(30.dp)
                     .hoverable(infoButtonInteractionSource)
@@ -193,10 +193,10 @@ fun Miniature(
                 onClick = {
                     showPopUpMessage(
                         "${ResString.picture} " +
-                        "${picture.name} \n" +
-                        "${ResString.size} " +
-                        "${picture.width}x${picture.height} " +
-                        "${ResString.pixels}"
+                                "${picture.name} \n" +
+                                "${ResString.size} " +
+                                "${picture.width}x${picture.height} " +
+                                "${ResString.pixels}"
                     )
                 }
             ) {

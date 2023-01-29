@@ -81,7 +81,7 @@ fun ToolBar(
                 shape = CircleShape
             ) {
                 Tooltip(ResString.back) {
-                    Clickable(
+                    clickable(
                         modifier = Modifier
                             .hoverable(backButtonInteractionSource)
                             .background(color = if (backButtonHover) TranslucentBlack else Transparent),
@@ -139,7 +139,7 @@ fun FilterButton(
         modifier = Modifier.background(color = Transparent).clip(CircleShape)
     ) {
         Tooltip("$type") {
-            Clickable(
+            clickable(
                 modifier = Modifier
                     .hoverable(interactionSource)
                     .background(color = if (filterButtonHover) TranslucentBlack else Transparent),

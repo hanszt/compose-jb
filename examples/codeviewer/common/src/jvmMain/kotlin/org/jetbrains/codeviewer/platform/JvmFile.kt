@@ -3,31 +3,31 @@ package org.jetbrains.codeviewer.platform
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.codeviewer.util.TextLines
-import java.io.FileInputStream
-import java.io.FilenameFilter
-import java.io.IOException
-import java.io.RandomAccessFile
+import java.io.*
 import java.nio.channels.FileChannel
 import java.nio.charset.StandardCharsets
 
-fun java.io.File.toProjectFile(): File = object : File {
+fun File.toProjectFile(): ViewerFile = object : ViewerFile {
     override val name: String get() = this@toProjectFile.name
 
     override val isDirectory: Boolean get() = this@toProjectFile.isDirectory
 
-    override val children: List<File>
+    override val children: List<ViewerFile>
         get() = this@toProjectFile
-            .listFiles(FilenameFilter { _, name -> !name.startsWith(".")})
+            .listFiles { _, name -> !name.startsWith(".") }
             .orEmpty()
-            .map { it.toProjectFile() }
+            .map(File::toProjectFile)
 
     override val hasChildren: Boolean
-        get() = isDirectory && listFiles()?.size ?: 0 > 0
+        get() = isDirectory && (listFiles()?.size ?: 0) > 0
 
 
-    override fun readLines(scope: CoroutineScope): TextLines {
+    override fun readLines(scope: CoroutineScope, coroutineDispatcher: CoroutineDispatcher): TextLines {
         var byteBufferSize: Int
         val byteBuffer = RandomAccessFile(this@toProjectFile, "r").use { file ->
             byteBufferSize = file.length().toInt()
@@ -48,7 +48,7 @@ fun java.io.File.toProjectFile(): File = object : File {
             }
         }
 
-        scope.launch(Dispatchers.IO) {
+        scope.launch(coroutineDispatcher) {
             readLinePositions(lineStartPositions)
             refreshJob.cancel()
             size = lineStartPositions.size
@@ -71,7 +71,7 @@ fun java.io.File.toProjectFile(): File = object : File {
     }
 }
 
-private fun java.io.File.readLinePositions(
+private fun File.readLinePositions(
     starts: IntList
 ) {
     require(length() <= Int.MAX_VALUE) {

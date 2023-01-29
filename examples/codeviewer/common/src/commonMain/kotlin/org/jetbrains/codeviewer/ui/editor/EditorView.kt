@@ -23,7 +23,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import org.jetbrains.codeviewer.platform.VerticalScrollbar
+import org.jetbrains.codeviewer.platform.verticalScrollbar
 import org.jetbrains.codeviewer.ui.common.AppTheme
 import org.jetbrains.codeviewer.ui.common.Fonts
 import org.jetbrains.codeviewer.ui.common.Settings
@@ -86,7 +86,7 @@ private fun Lines(lines: Editor.Lines, settings: Settings) = with(LocalDensity.c
             }
         }
 
-        VerticalScrollbar(
+        verticalScrollbar(
             Modifier.align(Alignment.CenterEnd),
             scrollState
         )

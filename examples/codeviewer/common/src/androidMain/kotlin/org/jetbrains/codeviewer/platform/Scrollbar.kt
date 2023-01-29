@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-actual fun VerticalScrollbar(
+actual fun verticalScrollbar(
     modifier: Modifier,
     scrollState: ScrollState
 ) = Unit
 
 @Composable
-actual fun VerticalScrollbar(
+actual fun verticalScrollbar(
     modifier: Modifier,
     scrollState: LazyListState
 ) = Unit

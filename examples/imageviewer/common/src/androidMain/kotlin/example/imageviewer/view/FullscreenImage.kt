@@ -1,7 +1,6 @@
 package example.imageviewer.view
 
 import android.graphics.Bitmap
-import android.graphics.Rect
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -28,14 +26,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import example.imageviewer.core.FilterType
 import example.imageviewer.model.AppState
 import example.imageviewer.model.ContentState
 import example.imageviewer.model.ScreenType
 import example.imageviewer.style.DarkGray
-import example.imageviewer.style.DarkGreen
 import example.imageviewer.style.Foreground
 import example.imageviewer.style.MiniatureColor
 import example.imageviewer.style.Transparent
@@ -49,10 +45,7 @@ import example.imageviewer.style.icFilterPixelOn
 import example.imageviewer.utils.adjustImageScale
 import example.imageviewer.utils.cropBitmapByScale
 import example.imageviewer.utils.displayWidth
-import example.imageviewer.utils.getDisplayBounds
 import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
 @Composable
 fun FullscreenImage(
@@ -80,7 +73,7 @@ fun ToolBar(
                 modifier = Modifier.padding(start = 20.dp).align(Alignment.CenterVertically),
                 shape = CircleShape
             ) {
-                Clickable(
+                clickable(
                     onClick = {
                         if (content.isContentReady()) {
                             content.restoreMainImage()
@@ -128,7 +121,7 @@ fun FilterButton(
     Box(
         modifier = Modifier.background(color = Transparent).clip(CircleShape)
     ) {
-        Clickable(
+        clickable(
             onClick = { content.toggleFilter(type) }
         ) {
             Image(

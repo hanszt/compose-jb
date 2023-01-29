@@ -2,4 +2,10 @@
 
 package org.jetbrains.codeviewer.platform
 
-actual val HomeFolder: File get() = java.io.File(System.getProperty("user.home")).toProjectFile()
+import java.io.File
+
+actual val HomeFolder: ViewerFile
+    get() = generateSequence(File(System.getProperty("user.dir"))) { it.parentFile }
+        .onEach(::println)
+        .first { "kotlin" in it.name.lowercase() }
+        .toProjectFile()

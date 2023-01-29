@@ -15,10 +15,6 @@ import kotlin.random.Random
 
 class Game {
     private var previousTimeNanos: Long = Long.MAX_VALUE
-    private val colors = arrayOf(
-        Color.Red, Color.Blue, Color.Cyan,
-        Color.Magenta, Color.Yellow, Color.Black
-    )
     private var startTime = 0L
 
     var size by mutableStateOf(Pair(0.dp, 0.dp))
@@ -44,6 +40,10 @@ class Game {
         finished = false
         paused = false
         pieces.clear()
+        val colors = arrayOf(
+            Color.Red, Color.Blue, Color.Cyan,
+            Color.Magenta, Color.Yellow, Color.Black
+        )
         repeat(numBlocks) { index ->
             pieces.add(PieceData(this, index * 1.5f + 5f, colors[index % colors.size]).also { piece ->
                 piece.position = Random.nextDouble(0.0, 100.0).toFloat()
@@ -74,7 +74,7 @@ class Game {
 
 @Composable
 @Preview
-fun FallingBallsGame() {
+fun fallingBallsGame() {
     val game = remember { Game() }
     val density = LocalDensity.current
     Column {
@@ -84,31 +84,7 @@ fun FallingBallsGame() {
             color = Color(218, 120, 91)
         )
         Text("Score ${game.score} Time ${game.elapsed / 1_000_000} Blocks ${game.numBlocks}", fontSize = 35.sp)
-        Row {
-            if (!game.started) {
-                Slider(
-                    value = game.numBlocks / 20f,
-                    onValueChange = { game.numBlocks = (it * 20f).toInt().coerceAtLeast(1) },
-                    modifier = Modifier.width(100.dp)
-                )
-            }
-            Button(onClick = {
-                game.started = !game.started
-                if (game.started) {
-                    game.start()
-                }
-            }) {
-                Text(if (game.started) "Stop" else "Start", fontSize = 40.sp)
-            }
-            if (game.started) {
-                Spacer(Modifier.padding(5.dp))
-                Button(onClick = {
-                    game.togglePause()
-                }) {
-                    Text(if (game.paused) "Resume" else "Pause", fontSize = 40.sp)
-                }
-            }
-        }
+        controls(game)
         if (game.started) {
             Box(modifier = Modifier
                 .fillMaxWidth()
@@ -119,7 +95,7 @@ fun FallingBallsGame() {
                     }
                 }
             ) {
-                game.pieces.forEachIndexed { index, piece -> Piece(index, piece) }
+                game.pieces.forEachIndexed { index, piece -> piece(index, piece) }
             }
         }
 
@@ -131,6 +107,35 @@ fun FallingBallsGame() {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun controls(game: Game) {
+    Row {
+        if (!game.started) {
+            Slider(
+                value = game.numBlocks / 20f,
+                onValueChange = { game.numBlocks = (it * 20f).toInt().coerceAtLeast(1) },
+                modifier = Modifier.width(200.dp)
+            )
+        }
+        Button(onClick = { stopStart(game) }) {
+            Text(if (game.started) "Stop" else "Start", fontSize = 40.sp)
+        }
+        if (game.started) {
+            Spacer(Modifier.padding(5.dp))
+            Button(onClick = { game.togglePause() }) {
+                Text(if (game.paused) "Resume" else "Pause", fontSize = 40.sp)
+            }
+        }
+    }
+}
+
+private fun stopStart(game: Game) {
+    game.started = !game.started
+    if (game.started) {
+        game.start()
     }
 }
 

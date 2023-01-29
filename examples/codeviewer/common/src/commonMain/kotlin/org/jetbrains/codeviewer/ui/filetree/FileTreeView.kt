@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,11 +26,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.codeviewer.platform.VerticalScrollbar
+import org.jetbrains.codeviewer.platform.verticalScrollbar
 import org.jetbrains.codeviewer.util.withoutWidthConstraints
 
 @Composable
-fun FileTreeViewTabView() = Surface {
+fun fileTreeViewTabView() = Surface {
     Row(
         Modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -46,7 +45,7 @@ fun FileTreeViewTabView() = Surface {
 }
 
 @Composable
-fun FileTreeView(model: FileTree) = Surface(
+fun fileTreeView(model: FileTree) = Surface(
     modifier = Modifier.fillMaxSize()
 ) {
     with(LocalDensity.current) {
@@ -58,11 +57,11 @@ fun FileTreeView(model: FileTree) = Surface(
                 state = scrollState
             ) {
                 items(model.items.size) {
-                    FileTreeItemView(14.sp, 14.sp.toDp() * 1.5f, model.items[it])
+                    fileTreeItemView(14.sp, 14.sp.toDp() * 1.5f, model.items[it])
                 }
             }
 
-            VerticalScrollbar(
+            verticalScrollbar(
                 Modifier.align(Alignment.CenterEnd),
                 scrollState
             )
@@ -71,7 +70,7 @@ fun FileTreeView(model: FileTree) = Surface(
 }
 
 @Composable
-private fun FileTreeItemView(fontSize: TextUnit, height: Dp, model: FileTree.Item) = Row(
+private fun fileTreeItemView(fontSize: TextUnit, height: Dp, model: FileTree.Item) = Row(
     modifier = Modifier
         .wrapContentHeight()
         .clickable { model.open() }
@@ -82,7 +81,7 @@ private fun FileTreeItemView(fontSize: TextUnit, height: Dp, model: FileTree.Ite
     val interactionSource = remember { MutableInteractionSource() }
     val active by interactionSource.collectIsHoveredAsState()
 
-    FileItemIcon(Modifier.align(Alignment.CenterVertically), model)
+    fileItemIcon(Modifier.align(Alignment.CenterVertically), model)
     Text(
         text = model.name,
         color = if (active) LocalContentColor.current.copy(alpha = 0.60f) else LocalContentColor.current,
@@ -98,28 +97,39 @@ private fun FileTreeItemView(fontSize: TextUnit, height: Dp, model: FileTree.Ite
 }
 
 @Composable
-private fun FileItemIcon(modifier: Modifier, model: FileTree.Item) = Box(modifier.size(24.dp).padding(4.dp)) {
+private fun fileItemIcon(modifier: Modifier, model: FileTree.Item) = Box(modifier.size(24.dp).padding(4.dp)) {
     when (val type = model.type) {
-        is FileTree.ItemType.Folder -> when {
-            !type.canExpand -> Unit
-            type.isExpanded -> Icon(
-                Icons.Default.KeyboardArrowDown, contentDescription = null, tint = LocalContentColor.current
-            )
-            else -> Icon(
-                Icons.Default.KeyboardArrowRight, contentDescription = null, tint = LocalContentColor.current
-            )
-        }
-        is FileTree.ItemType.File -> when (type.ext) {
-            "kt" -> Icon(Icons.Default.Code, contentDescription = null, tint = Color(0xFF3E86A0))
-            "xml" -> Icon(Icons.Default.Code, contentDescription = null, tint = Color(0xFFC19C5F))
-            "txt" -> Icon(Icons.Default.Description, contentDescription = null, tint = Color(0xFF87939A))
-            "md" -> Icon(Icons.Default.Description, contentDescription = null, tint = Color(0xFF87939A))
-            "gitignore" -> Icon(Icons.Default.BrokenImage, contentDescription = null, tint = Color(0xFF87939A))
-            "gradle" -> Icon(Icons.Default.Build, contentDescription = null, tint = Color(0xFF87939A))
-            "kts" -> Icon(Icons.Default.Build, contentDescription = null, tint = Color(0xFF3E86A0))
-            "properties" -> Icon(Icons.Default.Settings, contentDescription = null, tint = Color(0xFF62B543))
-            "bat" -> Icon(Icons.Default.Launch, contentDescription = null, tint = Color(0xFF87939A))
-            else -> Icon(Icons.Default.TextSnippet, contentDescription = null, tint = Color(0xFF87939A))
-        }
+        is FileTree.ItemType.Folder -> folderAction(type)
+        is FileTree.ItemType.File -> fileIcon(type)
+    }
+}
+
+@Composable
+private fun fileIcon(type: FileTree.ItemType.File) {
+    when (type.ext) {
+        "kt" -> Icon(Icons.Default.Code, contentDescription = null, tint = Color(0xFF3E86A0))
+        "xml" -> Icon(Icons.Default.Code, contentDescription = null, tint = Color(0xFFC19C5F))
+        "txt" -> Icon(Icons.Default.Description, contentDescription = null, tint = Color(0xFF87939A))
+        "md" -> Icon(Icons.Default.Description, contentDescription = null, tint = Color(0xFF87939A))
+        "gitignore" -> Icon(Icons.Default.BrokenImage, contentDescription = null, tint = Color(0xFF87939A))
+        "gradle" -> Icon(Icons.Default.Build, contentDescription = null, tint = Color(0xFF87939A))
+        "kts" -> Icon(Icons.Default.Build, contentDescription = null, tint = Color(0xFF3E86A0))
+        "properties" -> Icon(Icons.Default.Settings, contentDescription = null, tint = Color(0xFF62B543))
+        "bat" -> Icon(Icons.Default.Launch, contentDescription = null, tint = Color(0xFF87939A))
+        else -> Icon(Icons.Default.TextSnippet, contentDescription = null, tint = Color(0xFF87939A))
+    }
+}
+
+@Composable
+private fun folderAction(type: FileTree.ItemType.Folder) {
+    when {
+        !type.canExpand -> Unit
+        type.isExpanded -> Icon(
+            Icons.Default.KeyboardArrowDown,
+            contentDescription = null,
+            tint = LocalContentColor.current
+        )
+
+        else -> Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = LocalContentColor.current)
     }
 }
